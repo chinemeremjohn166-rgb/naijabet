@@ -1,0 +1,1906 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>NaijaBet 2027 — Nigeria Election Prediction Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ═══════════════ ROOT ═══════════════ */
+      :root{
+        --g:#008751;--gd:#005c38;--gl:#00c97a;--g2:#00e688;
+        --gold:#f5a623;--goldd:#c47d00;
+        --ink:#080d13;--ink2:#111820;--ink3:#1a2332;
+        --card:#ffffff08;--card2:#ffffff0d;
+        --bdr:rgba(255,255,255,0.08);--bdr2:rgba(255,255,255,0.14);
+        --txt:rgba(255,255,255,0.9);--muted:rgba(255,255,255,0.4);
+        --muted2:rgba(255,255,255,0.6);
+        --f-display:"Syne",sans-serif;
+        --f-body:"DM Sans",sans-serif;
+        --f-mono:"DM Mono",monospace;
+        --r:14px;--r2:20px;--r3:28px;
+      }
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      html{scroll-behavior:smooth;font-size:16px}
+      body{font-family:var(--f-body);background:var(--ink);color:var(--txt);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+      /* ── SCROLLBAR ── */
+      ::-webkit-scrollbar{width:6px;height:6px}
+      ::-webkit-scrollbar-track{background:var(--ink2)}
+      ::-webkit-scrollbar-thumb{background:var(--g);border-radius:99px}
+
+      /* ── NOISE ── */
+      body::after{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+
+      /* ═══ NAVBAR ═══ */
+      .nav{position:fixed;top:0;left:0;right:0;z-index:999;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:rgba(8,13,19,.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr)}
+      .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+      .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--g),var(--gl));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 0 20px rgba(0,201,122,.3)}
+      .nav-logo-text{font-family:var(--f-display);font-size:1.25rem;color:#fff;letter-spacing:-1px}
+      .nav-logo-text em{color:var(--gold);font-style:normal}
+      .nav-center{display:flex;gap:4px}
+      .nav-link{background:none;border:none;padding:.45rem .9rem;border-radius:99px;color:var(--muted2);font-size:.82rem;font-weight:500;cursor:pointer;font-family:var(--f-body);transition:all .2s}
+      .nav-link:hover,.nav-link.active{color:#fff;background:var(--card2)}
+      .nav-right{display:flex;align-items:center;gap:.75rem}
+      .wallet-pill{display:flex;align-items:center;gap:7px;background:rgba(0,135,81,.12);border:1px solid rgba(0,135,81,.35);border-radius:99px;padding:.35rem .9rem;font-family:var(--f-mono);font-size:.82rem;color:var(--gl);cursor:pointer;transition:all .2s}
+      .wallet-pill:hover{background:rgba(0,135,81,.22)}
+      .btn-reg{background:var(--g);color:#fff;border:none;border-radius:99px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--f-body);transition:all .2s}
+      .btn-reg:hover{background:var(--gd);transform:scale(1.03)}
+      .btn-topup{background:var(--gold);color:#080d13;border:none;border-radius:99px;padding:.42rem 1rem;font-size:.82rem;font-weight:700;cursor:pointer;font-family:var(--f-body);transition:all .2s}
+      .btn-topup:hover{background:var(--goldd);transform:scale(1.03)}
+      .hamburger{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer}
+
+      /* ═══ HERO ═══ */
+      .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 3rem;overflow:hidden}
+      .hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(0,135,81,.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none;animation:glowPulse 4s ease-in-out infinite}
+      @keyframes glowPulse{0%,100%{opacity:.8;transform:translate(-50%,-60%) scale(1)}50%{opacity:1;transform:translate(-50%,-60%) scale(1.1)}}
+      .hero-flag{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#008751 33.3%,#fff 33.3% 66.6%,#008751 66.6%)}
+      .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(0,135,81,.12);border:1px solid rgba(0,135,81,.3);border-radius:99px;padding:.38rem 1rem;font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gl);margin-bottom:1.5rem;animation:fadeUp .7s ease both}
+      .dot-live{width:7px;height:7px;border-radius:50%;background:var(--gl);animation:livePulse 1.4s infinite}
+      @keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,201,122,.4)}70%{opacity:.7;box-shadow:0 0 0 6px rgba(0,201,122,0)}}
+      .hero-h1{font-family:var(--f-display);font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:.95;letter-spacing:-3px;margin-bottom:1.2rem;animation:fadeUp .7s .1s ease both}
+      .hero-h1 .gold{color:var(--gold)}
+      .hero-h1 .green{background:linear-gradient(90deg,var(--gl),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+      .hero-sub{font-size:clamp(.95rem,2vw,1.15rem);color:var(--muted2);max-width:520px;line-height:1.7;margin:0 auto 2.5rem;animation:fadeUp .7s .2s ease both}
+      .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s .3s ease both}
+      .btn-hero{background:var(--g);color:#fff;border:none;border-radius:99px;padding:.9rem 2rem;font-size:1rem;font-weight:700;cursor:pointer;font-family:var(--f-body);transition:all .3s;display:flex;align-items:center;gap:8px}
+      .btn-hero:hover{background:var(--gd);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,135,81,.35)}
+      .btn-hero-o{background:transparent;color:#fff;border:1.5px solid var(--bdr2);border-radius:99px;padding:.9rem 2rem;font-size:1rem;font-weight:500;cursor:pointer;font-family:var(--f-body);transition:all .25s}
+      .btn-hero-o:hover{border-color:rgba(255,255,255,.4);background:var(--card)}
+      .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;margin-top:4rem;max-width:680px;width:100%;animation:fadeUp .7s .4s ease both}
+      .hero-stat{background:var(--ink2);padding:1.2rem;text-align:center}
+      .hero-stat-n{font-family:var(--f-display);font-size:1.6rem;font-weight:800;color:var(--gold);display:block}
+      .hero-stat-l{font-size:.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+      @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+      /* ═══ TICKER ═══ */
+      .ticker-wrap{background:rgba(0,135,81,.08);border-top:1px solid rgba(0,135,81,.2);border-bottom:1px solid rgba(0,135,81,.2);padding:.5rem 0;overflow:hidden;position:relative;z-index:1}
+      .ticker-inner{display:flex;gap:3rem;white-space:nowrap;animation:tickerScroll 40s linear infinite}
+      .ticker-inner:hover{animation-play-state:paused}
+      .ticker-item{font-size:.78rem;color:var(--muted2);display:flex;align-items:center;gap:.5rem}
+      .ticker-item .up{color:var(--gl)}
+      .ticker-item .dn{color:#f06060}
+      @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+      /* ═══ LAYOUT ═══ */
+      .page{display:none;position:relative;z-index:1}
+      .page.active{display:block}
+      .container{max-width:1280px;margin:0 auto;padding:0 2rem}
+      .section-pad{padding:5rem 0}
+
+      /* ═══ SECTION LABEL ═══ */
+      .sec-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gl);margin-bottom:.5rem;display:block}
+      .sec-title{font-family:var(--f-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:.5rem}
+      .sec-sub{font-size:.9rem;color:var(--muted2);line-height:1.7;max-width:560px}
+
+      /* ═══ MARKET TABS (Polymarket style) ═══ */
+      .market-layout{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;padding-top:5rem}
+      .market-main{}
+      .market-sidebar{}
+      .filter-bar{display:flex;align-items:center;gap:.6rem;margin-bottom:1.5rem;flex-wrap:wrap}
+      .filter-pill{background:var(--card);border:1px solid var(--bdr);border-radius:99px;padding:.4rem 1rem;font-size:.8rem;color:var(--muted2);cursor:pointer;transition:all .2s;font-family:var(--f-body)}
+      .filter-pill:hover{border-color:var(--gl);color:var(--gl)}
+      .filter-pill.active{background:var(--g);border-color:var(--g);color:#fff;font-weight:600}
+      .search-box{flex:1;min-width:200px;background:var(--card2);border:1px solid var(--bdr);border-radius:99px;padding:.45rem 1rem .45rem 2.2rem;color:#fff;font-family:var(--f-body);font-size:.85rem;outline:none;transition:border-color .2s;position:relative}
+      .search-wrap{position:relative;flex:1;min-width:200px}
+      .search-wrap::before{content:"🔍";position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:.75rem;pointer-events:none}
+      .search-wrap input{width:100%;background:var(--card2);border:1px solid var(--bdr);border-radius:99px;padding:.45rem 1rem .45rem 2.2rem;color:#fff;font-family:var(--f-body);font-size:.85rem;outline:none;transition:border-color .2s}
+      .search-wrap input:focus{border-color:var(--g)}
+      .search-wrap input::placeholder{color:var(--muted)}
+
+      /* ═══ MARKET CARD (Polymarket style) ═══ */
+      .market-grid{display:flex;flex-direction:column;gap:.8rem}
+      .mcard{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:1.2rem 1.4rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+      .mcard::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.02),transparent);pointer-events:none}
+      .mcard:hover{border-color:var(--bdr2);background:var(--card2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+      .mcard-top{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
+      .mcard-avatar{width:52px;height:52px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:1px solid var(--bdr)}
+      .mcard-avatar img{width:100%;height:100%;object-fit:cover}
+      .mcard-info{flex:1;min-width:0}
+      .mcard-name{font-family:var(--f-display);font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .mcard-meta{display:flex;align-items:center;gap:.5rem;margin-top:3px;flex-wrap:wrap}
+      .party-badge{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.3px}
+      .mcard-pos{font-size:.72rem;color:var(--muted);padding:2px 8px;background:var(--card2);border-radius:99px}
+      .mcard-state{font-size:.72rem;color:var(--muted)}
+      .mcard-odds{font-family:var(--f-mono);font-size:1rem;font-weight:500;color:var(--gold);background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:5px 10px;align-self:flex-start;flex-shrink:0}
+      .mcard-bar-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.9rem}
+      .mcard-bar-track{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+      .mcard-bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+      .mcard-pct{font-family:var(--f-mono);font-size:.78rem;color:var(--gold);min-width:36px;text-align:right}
+      .mcard-actions{display:flex;gap:.5rem;align-items:center}
+      .btn-yes{flex:1;background:rgba(0,201,122,.1);border:1px solid rgba(0,201,122,.3);border-radius:var(--r);padding:.55rem;font-size:.82rem;font-weight:700;color:var(--gl);cursor:pointer;transition:all .2s;font-family:var(--f-body)}
+      .btn-yes:hover{background:var(--g);color:#fff;border-color:var(--g)}
+      .btn-no{flex:1;background:rgba(240,96,96,.08);border:1px solid rgba(240,96,96,.25);border-radius:var(--r);padding:.55rem;font-size:.82rem;font-weight:700;color:#f06060;cursor:pointer;transition:all .2s;font-family:var(--f-body)}
+      .btn-no:hover{background:#c0392b;color:#fff;border-color:#c0392b}
+      .btn-bio{background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:var(--r);padding:.55rem .9rem;font-size:.78rem;color:var(--muted2);cursor:pointer;transition:all .2s;font-family:var(--f-body)}
+      .btn-bio:hover{background:var(--card2);color:#fff}
+      .btn-comment-mini{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:var(--r);padding:.55rem .8rem;font-size:.78rem;color:var(--gold);cursor:pointer;transition:all .2s;font-family:var(--f-body)}
+      .btn-comment-mini:hover{background:rgba(245,166,35,.18)}
+      .mcard-volume{font-size:.72rem;color:var(--muted);margin-top:.6rem}
+      .mcard-volume span{color:var(--gl);font-weight:600}
+
+      /* ═══ SIDEBAR (Betslip) ═══ */
+      .sidebar-card{background:var(--ink2);border:1px solid var(--bdr);border-radius:var(--r2);margin-bottom:1rem;overflow:hidden}
+      .sidebar-card-head{padding:1rem 1.2rem;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+      .sidebar-card-title{font-family:var(--f-display);font-size:.95rem;font-weight:700}
+      .slip-count{background:var(--g);color:#fff;border-radius:99px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700}
+      .slip-body{padding:.8rem}
+      .slip-empty{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.85rem}
+      .slip-empty-i{font-size:2.5rem;display:block;margin-bottom:.5rem}
+      .slip-entry{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:.8rem;margin-bottom:.5rem;position:relative}
+      .slip-rm{position:absolute;top:.5rem;right:.5rem;background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;transition:color .2s}
+      .slip-rm:hover{color:#f06060}
+      .slip-pos-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--gl);font-weight:700;margin-bottom:2px}
+      .slip-name{font-family:var(--f-display);font-size:.88rem;font-weight:700;padding-right:1.4rem;margin-bottom:2px}
+      .slip-party-lbl{font-size:.72rem;color:var(--muted);margin-bottom:.6rem}
+      .slip-stake-row{display:flex;align-items:center;gap:.5rem}
+      .slip-lbl{font-size:.72rem;color:var(--muted);white-space:nowrap}
+      .slip-input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:8px;padding:.38rem .6rem;color:#fff;font-family:var(--f-mono);font-size:.85rem;outline:none;min-width:0;transition:border-color .2s}
+      .slip-input:focus{border-color:var(--g)}
+      .slip-payout{font-family:var(--f-mono);font-size:.78rem;color:var(--gold);white-space:nowrap}
+      .slip-footer{padding:.8rem 1.2rem;border-top:1px solid var(--bdr)}
+      .slip-total-row{display:flex;justify-content:space-between;margin-bottom:.6rem;font-size:.83rem}
+      .slip-total-lbl{color:var(--muted)}
+      .slip-total-val{font-family:var(--f-mono);font-weight:600;color:var(--gold)}
+      .btn-place{width:100%;background:var(--g);color:#fff;border:none;border-radius:var(--r);padding:.8rem;font-size:.95rem;font-weight:700;cursor:pointer;font-family:var(--f-body);transition:all .2s;letter-spacing:.3px}
+      .btn-place:hover{background:var(--gd);box-shadow:0 6px 20px rgba(0,135,81,.35)}
+      .btn-place:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+      .btn-clear{width:100%;background:transparent;border:1px solid var(--bdr);border-radius:var(--r);padding:.55rem;font-size:.82rem;color:var(--muted);cursor:pointer;font-family:var(--f-body);transition:all .2s;margin-top:.4rem}
+      .btn-clear:hover{border-color:#f06060;color:#f06060}
+
+      /* ═══ POSITION TABS ═══ */
+      .pos-tabs-wrap{display:flex;gap:.5rem;flex-wrap:nowrap;overflow-x:auto;padding-bottom:.5rem;margin-bottom:1.2rem;scrollbar-width:none}
+      .pos-tabs-wrap::-webkit-scrollbar{display:none}
+      .pos-tab{background:var(--card);border:1px solid var(--bdr);border-radius:99px;padding:.42rem 1rem;font-size:.78rem;font-weight:500;color:var(--muted2);cursor:pointer;white-space:nowrap;transition:all .2s;font-family:var(--f-body)}
+      .pos-tab:hover{border-color:var(--gl);color:var(--gl)}
+      .pos-tab.active{background:var(--g);border-color:var(--g);color:#fff;font-weight:700}
+
+      /* ═══ LIVE CHART / LEADERBOARD ═══ */
+      #liveChart{width:100%;height:280px;position:relative;margin:1.5rem 0}
+      .chart-canvas{width:100%;height:100%}
+      .leaderboard-list{display:flex;flex-direction:column;gap:.6rem;margin-top:1rem}
+      .lb-item{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:.9rem 1rem;display:flex;align-items:center;gap:.8rem;transition:all .25s}
+      .lb-item:hover{background:var(--card2);border-color:var(--bdr2)}
+      .lb-rank{font-family:var(--f-display);font-size:1.2rem;color:var(--muted);width:28px;text-align:center;flex-shrink:0}
+      .lb-avatar{width:40px;height:40px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+      .lb-avatar img{width:100%;height:100%;object-fit:cover}
+      .lb-info{flex:1;min-width:0}
+      .lb-name{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .lb-sub{font-size:.72rem;color:var(--muted)}
+      .lb-bar-wrap{width:120px;flex-shrink:0}
+      .lb-bar-t{height:6px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin-bottom:3px}
+      .lb-bar-f{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+      .lb-pct{font-family:var(--f-mono);font-size:.78rem;color:var(--gold);text-align:right}
+      .lb-bets{font-family:var(--f-mono);font-size:.82rem;color:var(--gl);font-weight:600}
+
+      /* ═══ MODALS ═══ */
+      .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(8px)}
+      .modal-bg.open{opacity:1;pointer-events:all}
+      .modal{background:#111820;border:1px solid var(--bdr2);border-radius:var(--r3);padding:2rem;width:100%;max-width:480px;transform:scale(.95) translateY(10px);transition:all .25s;max-height:90vh;overflow-y:auto}
+      .modal-bg.open .modal{transform:scale(1) translateY(0)}
+      .modal-lg{max-width:680px}
+      .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+      .modal-title{font-family:var(--f-display);font-size:1.3rem;font-weight:800}
+      .modal-close{background:var(--card2);border:none;border-radius:8px;width:30px;height:30px;color:#fff;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
+      .modal-close:hover{background:rgba(255,255,255,.15)}
+      .form-group{margin-bottom:1.1rem}
+      .form-label{display:block;font-size:.75rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+      .form-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--bdr);border-radius:var(--r);padding:.75rem 1rem;font-family:var(--f-body);font-size:.95rem;color:#fff;outline:none;transition:border-color .2s}
+      .form-input:focus{border-color:var(--g)}
+      .form-input::placeholder{color:var(--muted)}
+      .form-input option{background:#111820}
+      .modal-actions{display:flex;gap:.6rem;margin-top:1.5rem}
+      .btn-cancel{flex:1;background:transparent;border:1.5px solid var(--bdr);border-radius:var(--r);padding:.7rem;color:var(--muted2);font-family:var(--f-body);font-size:.88rem;cursor:pointer;transition:all .2s}
+      .btn-cancel:hover{border-color:rgba(255,255,255,.3);color:#fff}
+      .btn-confirm{flex:2;background:var(--g);border:none;border-radius:var(--r);padding:.7rem;color:#fff;font-family:var(--f-body);font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
+      .btn-confirm:hover{background:var(--gd)}
+      .quick-amounts{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+      .qa{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:.3rem .75rem;font-size:.78rem;color:#fff;cursor:pointer;transition:all .2s}
+      .qa:hover{background:rgba(0,135,81,.2);border-color:var(--g)}
+      .confirm-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--bdr);font-size:.86rem}
+      .confirm-row:last-child{border:none}
+      .ck{color:var(--muted)}
+      .cv{font-family:var(--f-mono);font-weight:600}
+      .cv.payout{color:var(--gold);font-size:1rem}
+      .divider{height:1px;background:var(--bdr);margin:1rem 0}
+
+      /* ── BIO MODAL ── */
+      .bio-head{display:flex;gap:1.2rem;margin-bottom:1.5rem;align-items:flex-start}
+      .bio-avatar{width:80px;height:80px;border-radius:16px;overflow:hidden;flex-shrink:0;background:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+      .bio-avatar img{width:100%;height:100%;object-fit:cover}
+      .bio-name{font-family:var(--f-display);font-size:1.4rem;font-weight:800;margin-bottom:4px}
+      .bio-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem}
+      .bio-section-title{font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gl);margin-bottom:.5rem;margin-top:1rem}
+      .bio-text{font-size:.88rem;color:var(--muted2);line-height:1.7}
+      .manifesto-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+      .manifesto-list li{font-size:.85rem;color:var(--muted2);padding:.4rem .6rem;background:var(--card);border-radius:8px;border-left:2px solid var(--g);line-height:1.5}
+      .comment-section{margin-top:1.5rem}
+      .comment-input-wrap{display:flex;gap:.5rem;margin-bottom:.8rem}
+      .comment-input{flex:1;background:var(--card2);border:1px solid var(--bdr);border-radius:var(--r);padding:.55rem .8rem;color:#fff;font-family:var(--f-body);font-size:.85rem;outline:none;transition:border-color .2s}
+      .comment-input:focus{border-color:var(--g)}
+      .comment-input::placeholder{color:var(--muted)}
+      .btn-comment-send{background:var(--g);border:none;border-radius:var(--r);padding:.55rem .9rem;color:#fff;font-size:.8rem;font-weight:700;cursor:pointer;font-family:var(--f-body);transition:all .2s}
+      .btn-comment-send:hover{background:var(--gd)}
+      .comments-list{display:flex;flex-direction:column;gap:.5rem;max-height:200px;overflow-y:auto}
+      .comment-item{background:var(--card);border-radius:var(--r);padding:.6rem .8rem;font-size:.82rem}
+      .comment-user{font-weight:600;color:var(--gl);margin-bottom:2px;font-size:.75rem}
+      .comment-text{color:var(--muted2);line-height:1.5}
+      .comment-time{font-size:.65rem;color:var(--muted);margin-top:2px}
+
+      /* ── TOAST ── */
+      .toast-wrap{position:fixed;top:72px;right:1.2rem;z-index:3000;display:flex;flex-direction:column;gap:.5rem;pointer-events:none}
+      .toast{background:#1a2332;border:1px solid var(--bdr);border-radius:var(--r);padding:.75rem 1rem;font-size:.84rem;display:flex;align-items:center;gap:.6rem;min-width:260px;pointer-events:all;animation:slideR .3s ease;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+      .toast.ok{border-color:rgba(0,201,122,.4)}
+      .toast.err{border-color:rgba(240,96,96,.4)}
+      .toast.inf{border-color:rgba(245,166,35,.35)}
+      @keyframes slideR{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+
+      /* ── FLOAT BTN ── */
+      .float-slip{position:fixed;bottom:1.8rem;right:1.8rem;z-index:998;background:var(--g);color:#fff;border:none;border-radius:99px;padding:.8rem 1.4rem;font-family:var(--f-body);font-size:.88rem;font-weight:700;cursor:pointer;display:none;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,135,81,.4);transition:all .25s}
+      .float-slip.show{display:flex;animation:floatUp .3s ease}
+      .float-slip:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,135,81,.5)}
+      .float-badge{background:var(--gold);color:#080d13;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800}
+      @keyframes floatUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+      /* ═══ SPECIFIC PAGES ═══ */
+      /* FAQ */
+      .faq-list{display:flex;flex-direction:column;gap:.6rem;max-width:760px;margin:2rem auto 0}
+      .faq-item{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden}
+      .faq-q{width:100%;background:none;border:none;padding:1.1rem 1.4rem;text-align:left;font-family:var(--f-body);font-size:.95rem;font-weight:600;color:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap.5rem;transition:background .2s}
+      .faq-q:hover{background:var(--card2)}
+      .faq-chevron{transition:transform .3s;color:var(--gl);flex-shrink:0}
+      .faq-item.open .faq-chevron{transform:rotate(180deg)}
+      .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+      .faq-item.open .faq-a{max-height:400px}
+      .faq-a-inner{padding:.2rem 1.4rem 1.2rem;font-size:.88rem;color:var(--muted2);line-height:1.7}
+
+      /* FEEDBACK */
+      .feedback-wrap{max-width:640px;margin:2rem auto 0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r3);padding:2.5rem}
+      .star-row{display:flex;gap:.4rem;margin-bottom.2rem}
+      .star-btn{background:none;border:none;font-size:2rem;cursor:pointer;transition:transform .15s;line-height:1}
+      .star-btn:hover{transform:scale(1.2)}
+      .star-btn.active{filter:drop-shadow(0 0 6px var(--gold))}
+      .feedback-cats{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+      .fcat{background:var(--card2);border:1px solid var(--bdr);border-radius:99px;padding:.3rem .8rem;font-size:.78rem;color:var(--muted2);cursor:pointer;transition:all .2s}
+      .fcat.active{background:var(--g);border-color:var(--g);color:#fff}
+
+      /* REGISTER */
+      .reg-wrap{max-width:460px;margin:2rem auto 0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r3);padding:2.5rem}
+      .reg-tabs{display:flex;border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem}
+      .reg-tab{flex:1;background:none;border:none;padding:.65rem;font-family:var(--f-body);font-size:.88rem;font-weight:600;color:var(--muted2);cursor:pointer;transition:all .2s}
+      .reg-tab.active{background:var(--g);color:#fff}
+      .pw-strength{height:3px;border-radius:99px;margin-top:5px;transition:all .3s}
+
+      /* CONTACT */
+      .contact-wrap{max-width:640px;margin:2rem auto 0;display:grid;gap:1.2rem}
+      .contact-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:1.5rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:all .25s;text-decoration:none;color:inherit}
+      .contact-card:hover{border-color:var(--bdr2);background:var(--card2);transform:translateY(-2px)}
+      .contact-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+      .contact-text .ct{font-weight:700;font-size:.95rem;margin-bottom:3px}
+      .contact-text .cs{font-size:.82rem;color:var(--muted2)}
+
+      /* BETS TABLE */
+      .table-wrap{border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden}
+      table{width:100%;border-collapse:collapse;font-size:.85rem}
+      thead tr{background:var(--card2)}
+      th{padding:.9rem 1.1rem;text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1px solid var(--bdr);font-weight:700}
+      td{padding:.9rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+      tr:last-child td{border-bottom:none}
+      tr:hover td{background:rgba(255,255,255,.02)}
+      .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:.7rem;font-weight:700}
+      .badge-pending{background:rgba(245,166,35,.12);color:var(--gold)}
+      .badge-won{background:rgba(0,201,122,.12);color:var(--gl)}
+      .badge-lost{background:rgba(240,96,96,.12);color:#f06060}
+
+      /* HOW-IT-WORKS */
+      .how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:var(--r3);overflow:hidden;margin-top:2rem}
+      .how-step{background:var(--ink2);padding:2rem 1.5rem;text-align:center}
+      .how-num{font-family:var(--f-display);font-size:3.5rem;font-weight:900;color:rgba(0,135,81,.18);line-height:1;margin-bottom:.4rem}
+      .how-icon{font-size:1.8rem;margin-bottom:.6rem;display:block}
+      .how-t{font-weight:700;font-size:.95rem;margin-bottom:.4rem}
+      .how-d{font-size:.82rem;color:var(--muted2);line-height:1.6}
+
+      /* DISCLAIMER */
+      .disclaimer{background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.18);border-radius:var(--r);padding:1rem 1.2rem;font-size:.78rem;color:rgba(245,166,35,.75);line-height:1.6;max-width:860px;margin:1.5rem auto}
+
+      /* FOOTER */
+      .footer{background:#050a0f;border-top:1px solid var(--bdr);padding:3rem 2rem;position:relative;z-index:1}
+      .footer-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem}
+      .footer-brand{}
+      .footer-logo{font-family:var(--f-display);font-size:1.4rem;font-weight:800;margin-bottom:.5rem}
+      .footer-logo em{color:var(--gold);font-style:normal}
+      .footer-tag{font-size:.82rem;color:var(--muted);line-height:1.6}
+      .footer-col-title{font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:.8rem}
+      .footer-links{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+      .footer-links a,.footer-links button{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .2s;background:none;border:none;cursor:pointer;font-family:var(--f-body);text-align:left;padding:0}
+      .footer-links a:hover,.footer-links button:hover{color:#fff}
+      .footer-bottom{border-top:1px solid var(--bdr);padding-top:1.5rem;text-align:center;font-size:.75rem;color:rgba(255,255,255,.2);margin-top:2rem}
+
+      /* ═══ RESPONSIVE ═══ */
+      @media(max-width:1024px){
+        .market-layout{grid-template-columns:1fr}
+        .market-sidebar{display:none}
+        .float-slip{display:flex!important}
+      }
+      @media(max-width:768px){
+        .nav-center{display:none}
+        .hamburger{display:block}
+        .hero{padding:5rem 1rem 2rem}
+        .hero-stats{grid-template-columns:repeat(2,1fr)}
+        .container{padding:0 1rem}
+        .section-pad{padding:3rem 0}
+        .footer-inner{grid-template-columns:1fr}
+        table th:nth-child(3),table td:nth-child(3){display:none}
+      }
+      @media(max-width:480px){
+        .hero-stats{grid-template-columns:1fr 1fr}
+        .nav{padding:0 1rem}
+      }
+
+      /* ─ MOBILE MENU ─ */
+      .mob-menu{position:fixed;top:64px;left:0;right:0;background:rgba(8,13,19,.97);border-bottom:1px solid var(--bdr);z-index:900;display:flex;flex-direction:column;gap:.2rem;padding:.8rem;transform:translateY(-100%);transition:transform .3s}
+      .mob-menu.open{transform:translateY(0)}
+      .mob-link{background:none;border:none;padding:.75rem 1rem;border-radius:var(--r);color:var(--muted2);font-size:.9rem;font-weight:500;cursor:pointer;font-family:var(--f-body);text-align:left;transition:all .2s;width:100%}
+      .mob-link:hover,.mob-link.active{background:var(--card2);color:#fff}
+
+      /* ─ ENTRANCE ANIMATIONS ─ */
+      .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+      .reveal.in{opacity:1;transform:translateY(0)}
+    </style>
+  </head>
+  <body>
+    <!-- ══════════════ NAVBAR ══════════════ -->
+    <nav class="nav">
+      <div class="nav-logo" onclick="showPage('home')">
+        <div class="nav-logo-icon">🗳️</div>
+        <span class="nav-logo-text">Naija<em>Bet</em> 2027</span>
+      </div>
+      <div class="nav-center">
+        <button class="nav-link active" onclick="showPage('markets',this)">
+          Markets
+        </button>
+        <button class="nav-link" onclick="showPage('leaderboard',this)">
+          Live Polls
+        </button>
+        <button class="nav-link" onclick="showPage('mybets',this)">
+          My Bets
+        </button>
+        <button class="nav-link" onclick="showPage('faq',this)">FAQ</button>
+        <button class="nav-link" onclick="showPage('feedback',this)">
+          Feedback
+        </button>
+        <button class="nav-link" onclick="showPage('contact',this)">
+          Contact
+        </button>
+      </div>
+      <div class="nav-right">
+        <div class="wallet-pill" onclick="openModal('topupModal')">
+          💰 <span id="walletDisp">₦50,000</span>
+        </div>
+        <button class="btn-reg" onclick="openModal('regModal')">
+          Register
+        </button>
+        <button class="btn-topup" onclick="openModal('topupModal')">
+          Top Up
+        </button>
+        <button class="hamburger" onclick="toggleMob()">☰</button>
+      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mob-menu" id="mobMenu">
+      <button
+        class="mob-link active"
+        onclick="showPage('markets',this);toggleMob()"
+      >
+        🗳️ Markets
+      </button>
+      <button
+        class="mob-link"
+        onclick="showPage('leaderboard',this);toggleMob()"
+      >
+        📊 Live Polls
+      </button>
+      <button class="mob-link" onclick="showPage('mybets',this);toggleMob()">
+        📋 My Bets
+      </button>
+      <button class="mob-link" onclick="showPage('faq',this);toggleMob()">
+        ❓ FAQ
+      </button>
+      <button
+        class="mob-link"
+        onclick="showPage('feedback',this);toggleMob()"
+      >
+        💬 Feedback
+      </button>
+      <button class="mob-link" onclick="showPage('contact',this);toggleMob()">
+        📞 Contact
+      </button>
+      <button class="mob-link" onclick="openModal('regModal');toggleMob()">
+        👤 Register / Login
+      </button>
+    </div>
+
+    <!-- ══════════════ TICKER ══════════════ -->
+    <div class="ticker-wrap" style="margin-top: 64px">
+      <div class="ticker-inner" id="ticker"></div>
+    </div>
+
+    <!-- ══════════════ TOAST ══════════════ -->
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <!-- ══════════════ FLOAT SLIP BTN ══════════════ -->
+    <button
+      class="float-slip"
+      id="floatSlip"
+      onclick="openModal('slipModal')"
+    >
+      🗳️ Bet Slip <span class="float-badge" id="floatCount">0</span>
+    </button>
+
+    <!-- ══════════════ HOME PAGE ══════════════ -->
+    <div class="page active" id="page-home">
+      <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-flag"></div>
+        <div class="hero-eyebrow">
+          <span class="dot-live"></span>Nigeria 2027 General Elections — Betting
+          Now Live
+        </div>
+        <h1 class="hero-h1">
+          Predict.<br /><span class="gold">Stake.</span>
+          <span class="green">Win.</span>
+        </h1>
+        <p class="hero-sub">
+          Nigeria's most sophisticated election prediction market. Bet on
+          confirmed 2027 candidates across every state, position and party —
+          with full transparency and max 2× payout.
+        </p>
+        <div class="hero-cta">
+          <button class="btn-hero" onclick="showPage('markets')">
+            🗳️ Browse Markets
+          </button>
+          <button class="btn-hero-o" onclick="openModal('regModal')">
+            Create Account
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-n" id="hs1">18,274</span
+            ><span class="hero-stat-l">Active Bettors</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-n">₦2×</span
+            ><span class="hero-stat-l">Max Payout</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-n">42</span
+            ><span class="hero-stat-l">Positions</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-n">200+</span
+            ><span class="hero-stat-l">Candidates</span>
+          </div>
+        </div>
+      </section>
+      <div class="container section-pad" style="padding-top: 1rem">
+        <div class="how-grid reveal">
+          <div class="how-step">
+            <div class="how-num">01</div>
+            <span class="how-icon">💳</span>
+            <div class="how-t">Fund Wallet</div>
+            <div class="how-d">
+              Top up with bank transfer, USSD, or card. Min ₦500.
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">02</div>
+            <span class="how-icon">🔎</span>
+            <div class="how-t">Browse Markets</div>
+            <div class="how-d">
+              Choose candidates across President, Governors, Senate and more.
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">03</div>
+            <span class="how-icon">🎯</span>
+            <div class="how-t">Place Your Bet</div>
+            <div class="how-d">
+              Stake any amount. Max cashout is always 2× — transparent and fair.
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">04</div>
+            <span class="how-icon">🏆</span>
+            <div class="how-t">Collect Winnings</div>
+            <div class="how-d">
+              After INEC declares results, winnings are paid instantly to your
+              wallet.
+            </div>
+          </div>
+        </div>
+        <div class="disclaimer reveal">
+          ⚠️ <strong>18+ Only.</strong> NaijaBet is for entertainment. Never bet
+          more than you can afford to lose. Max payout = 2× stake. Party
+          affiliations reflect confirmed June 2026 primaries.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ MARKETS PAGE ══════════════ -->
+    <div class="page" id="page-markets">
+      <div class="container" style="padding-top: 80px; padding-bottom: 3rem">
+        <div class="market-layout">
+          <div class="market-main">
+            <div style="margin-bottom: 1.5rem">
+              <span class="sec-eyebrow">2027 Election Markets</span>
+              <h2 class="sec-title">All Candidates</h2>
+            </div>
+            <div class="pos-tabs-wrap" id="posTabs"></div>
+            <div class="filter-bar">
+              <div class="search-wrap">
+                <input
+                  type="text"
+                  id="searchBox"
+                  placeholder="Search candidate or party..."
+                  oninput="filterCards()"
+                />
+              </div>
+              <button
+                class="filter-pill active"
+                onclick="setFilter('all',this)"
+              >
+                All
+              </button>
+              <button class="filter-pill" onclick="setFilter('APC',this)">
+                APC
+              </button>
+              <button class="filter-pill" onclick="setFilter('ADC',this)">
+                ADC
+              </button>
+              <button class="filter-pill" onclick="setFilter('NDC',this)">
+                NDC
+              </button>
+              <button class="filter-pill" onclick="setFilter('PDP',this)">
+                PDP
+              </button>
+            </div>
+            <div class="market-grid" id="marketGrid"></div>
+          </div>
+          <div class="market-sidebar">
+            <div class="sidebar-card">
+              <div class="sidebar-card-head">
+                <span
+                  class="sidebar-card-title"
+                  style="display: flex; align-items: center; gap: 6px"
+                  >Bet Slip
+                  <span class="slip-count" id="slipCount">0</span></span
+                >
+                <button
+                  style="
+                    font-size: 0.72rem;
+                    background: none;
+                    border: none;
+                    color: var(--muted);
+                    cursor: pointer;
+                  "
+                  onclick="clearSlip()"
+                >
+                  Clear
+                </button>
+              </div>
+              <div class="slip-body" id="slipBody">
+                <div class="slip-empty" id="slipEmpty">
+                  <span class="slip-empty-i">🗳️</span>Select candidates to add
+                  to your slip
+                </div>
+              </div>
+              <div id="slipFooter" style="display: none">
+                <div class="slip-footer">
+                  <div class="slip-total-row">
+                    <span class="slip-total-lbl">Total Stake</span
+                    ><span class="slip-total-val" id="slipTotal">₦0</span>
+                  </div>
+                  <div class="slip-total-row">
+                    <span class="slip-total-lbl">Max Payout (2×)</span
+                    ><span class="slip-total-val" id="slipPayout">₦0</span>
+                  </div>
+                  <button
+                    class="btn-place"
+                    id="btnPlace"
+                    onclick="openConfirm()"
+                  >
+                    Place Bet →
+                  </button>
+                  <button class="btn-clear" onclick="clearSlip()">
+                    Clear Slip
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="sidebar-card">
+              <div class="sidebar-card-head">
+                <span class="sidebar-card-title">🔥 Top Markets</span>
+              </div>
+              <div style="padding: 0.8rem">
+                <div id="topMarketsWidget"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ LEADERBOARD PAGE ══════════════ -->
+    <div class="page" id="page-leaderboard">
+      <div class="container section-pad">
+        <span class="sec-eyebrow">Real-Time Data</span>
+        <h2 class="sec-title">Live Poll Tracker</h2>
+        <p class="sec-sub">
+          Live betting volumes and popularity rankings updated in real time.
+        </p>
+        <div id="liveChart" style="margin: 2rem 0">
+          <canvas id="chartCanvas" class="chart-canvas"></canvas>
+        </div>
+        <div class="pos-tabs-wrap" id="lbPosTabs"></div>
+        <div class="leaderboard-list" id="lbList"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ MY BETS PAGE ══════════════ -->
+    <div class="page" id="page-mybets">
+      <div class="container section-pad">
+        <span class="sec-eyebrow">Account</span>
+        <h2 class="sec-title">My Bets</h2>
+        <div class="table-wrap" style="margin-top: 1.5rem">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Position</th>
+                <th>Party</th>
+                <th>Stake</th>
+                <th>Max Win</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="betsBody">
+              <tr>
+                <td
+                  colspan="7"
+                  style="text-align: center; color: var(--muted); padding: 3rem"
+                >
+                  No bets placed yet.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ FAQ PAGE ══════════════ -->
+    <div class="page" id="page-faq">
+      <div class="container section-pad">
+        <span class="sec-eyebrow">Help Centre</span>
+        <h2 class="sec-title">Frequently Asked Questions</h2>
+        <div class="faq-list" id="faqList"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ FEEDBACK PAGE ══════════════ -->
+    <div class="page" id="page-feedback">
+      <div class="container section-pad">
+        <span class="sec-eyebrow">Your Voice</span>
+        <h2 class="sec-title">Leave Feedback</h2>
+        <div class="feedback-wrap reveal">
+          <div class="form-group">
+            <label class="form-label">Overall Rating</label>
+            <div class="star-row" id="starRow">
+              <button class="star-btn" onclick="setStar(1)">⭐</button>
+              <button class="star-btn" onclick="setStar(2)">⭐</button>
+              <button class="star-btn" onclick="setStar(3)">⭐</button>
+              <button class="star-btn" onclick="setStar(4)">⭐</button>
+              <button class="star-btn" onclick="setStar(5)">⭐</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <div class="feedback-cats">
+              <span class="fcat active" onclick="toggleFcat(this)"
+                >General</span
+              >
+              <span class="fcat" onclick="toggleFcat(this)">UI/Design</span>
+              <span class="fcat" onclick="toggleFcat(this)">Betting</span>
+              <span class="fcat" onclick="toggleFcat(this)">Performance</span>
+              <span class="fcat" onclick="toggleFcat(this)">Data Accuracy</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input
+              class="form-input"
+              id="fbName"
+              placeholder="e.g. Chukwuemeka A."
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Feedback</label>
+            <textarea
+              class="form-input"
+              id="fbText"
+              rows="5"
+              placeholder="Tell us what you think about NaijaBet 2027..."
+              style="resize: vertical"
+            ></textarea>
+          </div>
+          <button
+            class="btn-confirm"
+            style="width: 100%; padding: 0.9rem; font-size: 0.95rem"
+            onclick="submitFeedback()"
+          >
+            Submit Feedback 🚀
+          </button>
+          <div
+            id="fbThanks"
+            style="
+              display: none;
+              text-align: center;
+              padding: 2rem;
+              color: var(--gl);
+            "
+          >
+            <span style="font-size: 3rem">🎉</span>
+            <p
+              style="
+                font-family: var(--f-display);
+                font-size: 1.2rem;
+                font-weight: 700;
+                margin-top: 0.5rem;
+              "
+            >
+              Thank you!
+            </p>
+            <p
+              style="
+                font-size: 0.85rem;
+                color: var(--muted2);
+                margin-top: 0.3rem;
+              "
+            >
+              Your feedback has been received.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ CONTACT PAGE ══════════════ -->
+    <div class="page" id="page-contact">
+      <div class="container section-pad">
+        <span class="sec-eyebrow">Get In Touch</span>
+        <h2 class="sec-title">Contact Us</h2>
+        <div class="contact-wrap">
+          <a
+            href="https://wa.me/2349016119197"
+            target="_blank"
+            class="contact-card"
+            style="border-color: rgba(37, 211, 102, 0.3)"
+          >
+            <div
+              class="contact-icon"
+              style="background: rgba(37, 211, 102, 0.12)"
+            >
+              💬
+            </div>
+            <div class="contact-text">
+              <div class="ct">WhatsApp (Fastest Response)</div>
+              <div class="cs">
+                Message us directly on +234 901 611 9197 — available 24/7
+              </div>
+            </div>
+            <span style="font-size: 1.5rem; margin-left: auto">→</span>
+          </a>
+          <div class="contact-card">
+            <div
+              class="contact-icon"
+              style="background: rgba(0, 135, 81, 0.12)"
+            >
+              📧
+            </div>
+            <div class="contact-text">
+              <div class="ct">Email Support</div>
+              <div class="cs">
+                support@naijabet2027.ng — Response within 24 hours
+              </div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div
+              class="contact-icon"
+              style="background: rgba(29, 161, 242, 0.12)"
+            >
+              🐦
+            </div>
+            <div class="contact-text">
+              <div class="ct">Twitter / X</div>
+              <div class="cs">
+                @NaijaBet2027 — Follow for real-time updates and announcements
+              </div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div
+              class="contact-icon"
+              style="background: rgba(245, 166, 35, 0.12)"
+            >
+              📍
+            </div>
+            <div class="contact-text">
+              <div class="ct">Office</div>
+              <div class="cs">
+                Victoria Island, Lagos, Nigeria — By appointment only
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo">Naija<em>Bet</em> 2027</div>
+          <div class="footer-tag">
+            Nigeria's premier election prediction market. Transparent, fair,
+            and trusted.
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Platform</div>
+          <ul class="footer-links">
+            <li><button onclick="showPage('markets')">Markets</button></li>
+            <li>
+              <button onclick="showPage('leaderboard')">Live Polls</button>
+            </li>
+            <li><button onclick="showPage('mybets')">My Bets</button></li>
+            <li>
+              <button onclick="openModal('regModal')">Create Account</button>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Support</div>
+          <ul class="footer-links">
+            <li><button onclick="showPage('faq')">FAQ</button></li>
+            <li><button onclick="showPage('feedback')">Feedback</button></li>
+            <li><button onclick="showPage('contact')">Contact Us</button></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Responsible Gambling</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2027 NaijaBet. All rights reserved. 18+ only. Bet responsibly. Max
+        payout = 2× stake.
+      </div>
+    </footer>
+
+    <!-- ══════════════ MODALS ══════════════ -->
+
+    <!-- REGISTER / LOGIN -->
+    <div class="modal-bg" id="regModal" onclick="bgClose(event,'regModal')">
+      <div class="modal">
+        <div class="modal-head">
+          <span class="modal-title">👤 Account</span
+          ><button class="modal-close" onclick="closeModal('regModal')">
+            ✕
+          </button>
+        </div>
+        <div
+          class="reg-wrap"
+          style="margin: 0; background: none; border: none; padding: 0"
+        >
+          <div class="reg-tabs">
+            <button
+              class="reg-tab active"
+              id="tabReg"
+              onclick="switchReg('reg')"
+            >
+              Register
+            </button>
+            <button
+              class="reg-tab"
+              id="tabLogin"
+              onclick="switchReg('login')"
+            >
+              Login
+            </button>
+          </div>
+          <div id="regForm">
+            <div class="form-group">
+              <label class="form-label">Full Name</label
+              ><input
+                class="form-input"
+                id="rName"
+                placeholder="e.g. Chukwuemeka Obi"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label
+              ><input
+                class="form-input"
+                type="email"
+                id="rEmail"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label
+              ><input
+                class="form-input"
+                type="tel"
+                id="rPhone"
+                placeholder="+234 801 234 5678"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label
+              ><input
+                class="form-input"
+                type="password"
+                id="rPass"
+                placeholder="Min. 8 characters"
+                oninput="checkPw(this.value)"
+              />
+              <div class="pw-strength" id="pwBar"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">State of Origin</label
+              ><select class="form-input" id="rState">
+                <option value="">Select state...</option>
+              </select>
+            </div>
+            <div
+              style="
+                font-size: 0.78rem;
+                color: var(--muted);
+                margin-bottom: 1rem;
+              "
+            >
+              By registering you agree to our Terms of Service. You must be 18+
+              to bet.
+            </div>
+            <button
+              class="btn-confirm"
+              style="width: 100%; padding: 0.8rem"
+              onclick="doRegister()"
+            >
+              Create Account 🚀
+            </button>
+          </div>
+          <div id="loginForm" style="display: none">
+            <div class="form-group">
+              <label class="form-label">Email Address</label
+              ><input
+                class="form-input"
+                type="email"
+                id="lEmail"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label
+              ><input
+                class="form-input"
+                type="password"
+                id="lPass"
+                placeholder="Your password"
+              />
+            </div>
+            <button
+              class="btn-confirm"
+              style="width: 100%; padding: 0.8rem; margin-top: 0.5rem"
+              onclick="doLogin()"
+            >
+              Login →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP UP -->
+    <div
+      class="modal-bg"
+      id="topupModal"
+      onclick="bgClose(event,'topupModal')"
+    >
+      <div class="modal">
+        <div class="modal-head">
+          <span class="modal-title">💰 Top Up Wallet</span
+          ><button class="modal-close" onclick="closeModal('topupModal')">
+            ✕
+          </button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount (₦)</label
+          ><input
+            type="number"
+            class="form-input"
+            id="topupAmt"
+            placeholder="Enter amount"
+            min="500"
+          />
+          <div class="quick-amounts">
+            <span class="qa" onclick="setAmt(1000)">₦1k</span
+            ><span class="qa" onclick="setAmt(5000)">₦5k</span
+            ><span class="qa" onclick="setAmt(10000)">₦10k</span
+            ><span class="qa" onclick="setAmt(50000)">₦50k</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment Method</label
+          ><select class="form-input">
+            <option>🏦 Bank Transfer (GTBank, Access, UBA)</option>
+            <option>📱 USSD (*737#, *901#)</option>
+            <option>💳 Debit / Credit Card</option>
+            <option>📲 Opay / Palmpay / Kuda</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('topupModal')">
+            Cancel</button
+          ><button class="btn-confirm" onclick="doTopup()">Add Funds</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRM BET -->
+    <div
+      class="modal-bg"
+      id="confirmModal"
+      onclick="bgClose(event,'confirmModal')"
+    >
+      <div class="modal">
+        <div class="modal-head">
+          <span class="modal-title">🎯 Confirm Bet</span
+          ><button class="modal-close" onclick="closeModal('confirmModal')">
+            ✕
+          </button>
+        </div>
+        <div id="confirmBody" style="margin-bottom: 1rem"></div>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal('confirmModal')">
+            Go Back</button
+          ><button class="btn-confirm" onclick="doPlace()">
+            ✅ Confirm & Place
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIP (mobile) -->
+    <div class="modal-bg" id="slipModal" onclick="bgClose(event,'slipModal')">
+      <div class="modal">
+        <div class="modal-head">
+          <span
+            class="modal-title"
+            style="display: flex; align-items: center; gap: 6px"
+            >Bet Slip <span class="slip-count" id="slipCountM">0</span></span
+          ><button class="modal-close" onclick="closeModal('slipModal')">
+            ✕
+          </button>
+        </div>
+        <div id="slipBodyM" class="slip-body">
+          <div class="slip-empty">
+            <span class="slip-empty-i">🗳️</span>No selections yet
+          </div>
+        </div>
+        <div id="slipFooterM" style="display: none">
+          <div style="padding: 0.8rem 0">
+            <div class="slip-total-row" style="margin-bottom: 0.4rem">
+              <span class="slip-total-lbl">Total Stake</span
+              ><span class="slip-total-val" id="slipTotalM">₦0</span>
+            </div>
+            <div class="slip-total-row" style="margin-bottom: 0.8rem">
+              <span class="slip-total-lbl">Max Payout</span
+              ><span class="slip-total-val" id="slipPayoutM">₦0</span>
+            </div>
+            <button class="btn-place" onclick="openConfirm()">
+              Place Bet →
+            </button>
+            <button class="btn-clear" onclick="clearSlip()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIO MODAL -->
+    <div class="modal-bg" id="bioModal" onclick="bgClose(event,'bioModal')">
+      <div class="modal modal-lg">
+        <div class="modal-head">
+          <span class="modal-title" id="bioModalTitle">Candidate Profile</span
+          ><button class="modal-close" onclick="closeModal('bioModal')">
+            ✕
+          </button>
+        </div>
+        <div id="bioBody"></div>
+      </div>
+    </div>
+
+    <script>
+      // ═══════════════════════════════════════
+      //  PARTY DATA
+      // ═══════════════════════════════════════
+      const PARTIES={
+        APC: {name:"APC",full:"All Progressives Congress",color:"#1a6b3c",bg:"rgba(26,107,60,.2)",text:"#4dc880",logo:"🟢"},
+        ADC: {name:"ADC",full:"African Democratic Congress",color:"#005a8e",bg:"rgba(0,90,142,.2)",text:"#4ab0f5",logo:"🔵"},
+        NDC: {name:"NDC",full:"Nigeria Democratic Congress",color:"#7c3aed",bg:"rgba(124,58,237,.18)",text:"#c084fc",logo:"🟣"},
+        PDP: {name:"PDP",full:"People's Democratic Party",color:"#991b1b",bg:"rgba(153,27,27,.18)",text:"#fca5a5",logo:"🔴"},
+        PDP2:{name:"PDP",full:"PDP (Turaki Faction)",color:"#b45309",bg:"rgba(180,83,9,.18)",text:"#fb923c",logo:"🟠"},
+        APM: {name:"APM",full:"Advanced Peoples Movement",color:"#0f766e",bg:"rgba(15,118,110,.2)",text:"#2dd4bf",logo:"🩵"},
+        SDP: {name:"SDP",full:"Social Democratic Party",color:"#6d28d9",bg:"rgba(109,40,217,.18)",text:"#a78bfa",logo:"🟣"},
+        AAC: {name:"AAC",full:"African Action Congress",color:"#b91c1c",bg:"rgba(185,28,28,.18)",text:"#f87171",logo:"❤️"},
+        LP:  {name:"LP", full:"Labour Party",color:"#065f46",bg:"rgba(6,95,70,.18)",text:"#34d399",logo:"🌿"},
+        NNPP:{name:"NNPP",full:"New Nigeria Peoples Party",color:"#a16207",bg:"rgba(161,98,7,.18)",text:"#fcd34d",logo:"⭐"},
+        APGA:{name:"APGA",full:"All Progressives Grand Alliance",color:"#0e7490",bg:"rgba(14,116,144,.18)",text:"#67e8f9",logo:"💠"},
+      };
+
+      // ═══════════════════════════════════════
+      //  CANDIDATE DATA — All positions
+      //  avatar: emoji placeholder (real sites use photos)
+      // ═══════════════════════════════════════
+      const POSITIONS=[
+        {id:"president",  label:"🏛️ President"},
+        {id:"governor",   label:"🏠 Governors"},
+        {id:"senate_pres",label:"🏢 Senate President"},
+        {id:"house_speaker",label:"🗣️ Speaker HoR"},
+        {id:"house_assembly",label:"🏛️ State Assembly Speakers"},
+      ];
+
+      const CANDIDATE_BIOS={
+        p1:{bio:"President Bola Ahmed Tinubu (born March 29, 1952) is the 16th President of Nigeria. A former Lagos Governor (1999–2007), he is the architect of modern Lagos and pioneer of the APC alliance. He holds a degree in Accounting from Chicago State University.",manifesto:["Renewed Hope: economic stabilisation through subsidy removal","Strengthening security through Renewed Hope Agenda","Agriculture transformation for food security","Infrastructure: roads, rail, power","Youth empowerment and job creation through NELFUND"]},
+        p2:{bio:"Atiku Abubakar (born November 25, 1946) is a former Nigerian Vice President (1999–2007). A Fulani businessman and politician from Adamawa State, he is contesting the presidency for the 7th time under the ADC banner after leaving the PDP.",manifesto:["Privatise NNPC for efficiency and revenue","Restructure Nigeria into true federalism","Create 2 million jobs annually","Revamp the education sector with N5tr annual spend","Combat insecurity through intelligence reform"]},
+        p3:{bio:"Peter Gregory Obi (born July 19, 1961) is former Governor of Anambra State (2006–2014). A businessman and politician, he was LP's 2023 presidential candidate (25% of votes) and now leads the NDC with Kwankwaso as running mate.",manifesto:["Move Nigeria from consumption to production economy","Invest 25% of budget in education","End insecurity: restructure security architecture","One student, one laptop — digital education","Fight corruption with zero tolerance and asset recovery"]},
+        p4:{bio:"Dr. Goodluck Ebele Jonathan (born November 20, 1957) is Nigeria's 14th President (2010–2015). A marine biologist from Bayelsa State, he is running under the PDP Turaki faction after leaving political retirement.",manifesto:["Peace and reconciliation across the nation","Rebuild Niger Delta infrastructure","Empower women and youth","Agriculture for food security","Restore confidence in Nigeria's democracy"]},
+        p5:{bio:"Senator Sandy Onor is a former Nigerian Senator representing Cross River Central. A lawyer and administrator, he emerges as the consensus candidate of the Wike-aligned PDP faction ahead of 2027.",manifesto:["Restore PDP as a credible opposition","Fight poverty through social investment","Rebuild infrastructure across the six geopolitical zones","Healthcare reform and universal basic coverage","Power sector revival"]},
+        p6:{bio:"Seyi Makinde (born December 25, 1967) is the incumbent Governor of Oyo State. An engineer and businessman, he is one of Nigeria's most popular state executives and now runs under the APM ticket.",manifesto:["Agro-industrialisation: make Oyo model national","Education free at primary and secondary levels","Healthcare infrastructure upgrade","Fight insecurity with community policing","Youth empowerment through technical education"]},
+        p7:{bio:"Adewole Adebayo is a Nigerian lawyer, lecturer and author. He contested the 2023 election under SDP and is considered a deep intellectual voice in Nigerian politics.",manifesto:["Total restructuring of Nigeria's federal system","End ASUU strikes through sustainable education funding","Land reform and agricultural renaissance","Rule of law above politics","Anti-corruption through institutional independence"]},
+        p8:{bio:"Omoyele Sowore (born October 15, 1971) is a journalist, activist and founder of Sahara Reporters. A two-time AAC presidential candidate known for his #RevolutionNow campaign and fearless anti-corruption crusade.",manifesto:["Total overhaul of security agencies","Free university education","Immediate minimum wage of ₦100,000","Decentralise power to states","End corruption with public asset seizures"]},
+      };
+
+      // State list for dropdowns and governor cards
+      const STATES=["Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Borno","Cross River","Delta","Ebonyi","Edo","Ekiti","Enugu","FCT Abuja","Gombe","Imo","Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nasarawa","Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe","Zamfara"];
+
+      // Governor candidates per state (sample representative candidates; real data based on public info)
+      const GOV_CANDIDATES=[
+        {id:"g1",name:"Alex Otti",party:"LP",state:"Abia",emoji:"👴",poll:54,note:"Incumbent Abia Governor"},
+        {id:"g2",name:"Umar Fintiri",party:"PDP",state:"Adamawa",emoji:"👨",poll:51,note:"Incumbent Adamawa Governor"},
+        {id:"g3",name:"Umo Eno",party:"APC",state:"Akwa Ibom",emoji:"👴",poll:49,note:"Incumbent Akwa Ibom Governor"},
+        {id:"g4",name:"Charles Soludo",party:"APGA",state:"Anambra",emoji:"🎓",poll:58,note:"Incumbent Anambra Governor"},
+        {id:"g5",name:"Bala Mohammed",party:"PDP",state:"Bauchi",emoji:"🧔",poll:47,note:"Incumbent Bauchi Governor"},
+        {id:"g6",name:"Douye Diri",party:"PDP",state:"Bayelsa",emoji:"👨",poll:52,note:"Incumbent Bayelsa Governor"},
+        {id:"g7",name:"Hyacinth Alia",party:"APC",state:"Benue",emoji:"👴",poll:44,note:"Incumbent Benue Governor"},
+        {id:"g8",name:"Babagana Zulum",party:"APC",state:"Borno",emoji:"🧔",poll:62,note:"Incumbent Borno Governor · Highly popular"},
+        {id:"g9",name:"Bassey Otu",party:"APC",state:"Cross River",emoji:"👨",poll:46,note:"Incumbent Cross River Governor"},
+        {id:"g10",name:"Sheriff Oborevwori",party:"PDP",state:"Delta",emoji:"👴",poll:50,note:"Incumbent Delta Governor"},
+        {id:"g11",name:"Francis Nwifuru",party:"APC",state:"Ebonyi",emoji:"👨",poll:48,note:"Incumbent Ebonyi Governor"},
+        {id:"g12",name:"Monday Okpebholo",party:"APC",state:"Edo",emoji:"🧑",poll:43,note:"Incumbent Edo Governor"},
+        {id:"g13",name:"Biodun Oyebanji",party:"APC",state:"Ekiti",emoji:"👨‍💼",poll:51,note:"Incumbent Ekiti Governor"},
+        {id:"g14",name:"Peter Mbah",party:"PDP",state:"Enugu",emoji:"👨",poll:53,note:"Incumbent Enugu Governor"},
+        {id:"g15",name:"Ifeoma Nkiruka",party:"ADC",state:"FCT Abuja",emoji:"👩",poll:38,note:"ADC FCT Governorship candidate"},
+        {id:"g16",name:"Muhammed Inuwa Yahaya",party:"APC",state:"Gombe",emoji:"🧔",poll:55,note:"Incumbent Gombe Governor"},
+        {id:"g17",name:"Hope Uzodimma",party:"APC",state:"Imo",emoji:"👴",poll:41,note:"Incumbent Imo Governor"},
+        {id:"g18",name:"Umar Namadi",party:"APC",state:"Jigawa",emoji:"🧑",poll:50,note:"Incumbent Jigawa Governor"},
+        {id:"g19",name:"Uba Sani",party:"APC",state:"Kaduna",emoji:"👨",poll:48,note:"Incumbent Kaduna Governor"},
+        {id:"g20",name:"Abba Kabir Yusuf",party:"NDC",state:"Kano",emoji:"🎩",poll:47,note:"Incumbent Kano Governor · Ex-NNPP, now NDC"},
+        {id:"g21",name:"Dikko Radda",party:"APC",state:"Katsina",emoji:"🧔",poll:46,note:"Incumbent Katsina Governor"},
+        {id:"g22",name:"Nasir Idris",party:"APC",state:"Kebbi",emoji:"👨",poll:48,note:"Incumbent Kebbi Governor"},
+        {id:"g23",name:"Ahmed Ododo",party:"APC",state:"Kogi",emoji:"🧑",poll:50,note:"Incumbent Kogi Governor"},
+        {id:"g24",name:"AbdulRahman AbdulRazaq",party:"APC",state:"Kwara",emoji:"👴",poll:49,note:"Incumbent Kwara Governor"},
+        {id:"g25",name:"Babajide Sanwo-Olu",party:"APC",state:"Lagos",emoji:"👴",poll:52,note:"Incumbent Lagos Governor"},
+        {id:"g26",name:"Abdullahi Sule",party:"APC",state:"Nasarawa",emoji:"👨",poll:47,note:"Incumbent Nasarawa Governor"},
+        {id:"g27",name:"Mohammed Bago",party:"APC",state:"Niger",emoji:"🧔",poll:50,note:"Incumbent Niger Governor"},
+        {id:"g28",name:"Dapo Abiodun",party:"APC",state:"Ogun",emoji:"👴",poll:46,note:"Incumbent Ogun Governor"},
+        {id:"g29",name:"Lucky Aiyedatiwa",party:"APC",state:"Ondo",emoji:"👨",poll:48,note:"Incumbent Ondo Governor"},
+        {id:"g30",name:"Ademola Adeleke",party:"PDP",state:"Osun",emoji:"💃",poll:51,note:"Incumbent Osun Governor · 'Davido's Uncle'"},
+        {id:"g31",name:"Seyi Makinde",party:"APM",state:"Oyo",emoji:"👨‍💼",poll:57,note:"Incumbent Oyo Governor · Running for President on APM"},
+        {id:"g32",name:"Caleb Mutfwang",party:"PDP",state:"Plateau",emoji:"👨",poll:50,note:"Incumbent Plateau Governor"},
+        {id:"g33",name:"Siminalayi Fubara",party:"PDP",state:"Rivers",emoji:"🧑",poll:52,note:"Incumbent Rivers Governor"},
+        {id:"g34",name:"Ahmad Aliyu",party:"APC",state:"Sokoto",emoji:"🧔",poll:46,note:"Incumbent Sokoto Governor"},
+        {id:"g35",name:"Agbu Kefas",party:"PDP",state:"Taraba",emoji:"👨",poll:49,note:"Incumbent Taraba Governor"},
+        {id:"g36",name:"Mai Mala Buni",party:"APC",state:"Yobe",emoji:"👴",poll:51,note:"Incumbent Yobe Governor"},
+        {id:"g37",name:"Dauda Lawal",party:"APC",state:"Zamfara",emoji:"🧑",poll:45,note:"Incumbent Zamfara Governor"},
+        // APC challengers
+        {id:"g38",name:"APC Challenger",party:"APC",state:"Abia",emoji:"🧑",poll:32,note:"APC Governorship candidate"},
+        {id:"g39",name:"ADC Challenger",party:"ADC",state:"Lagos",emoji:"🧔",poll:17,note:"ADC Lagos Governorship candidate"},
+        {id:"g40",name:"NDC Challenger",party:"NDC",state:"Lagos",emoji:"👨",poll:31,note:"NDC Lagos candidate · Gbadebo Rhodes-Vivour"},
+      ];
+
+      // Senate President candidates
+      const SENATE_CANDIDATES=[
+        {id:"s1",name:"Godswill Akpabio",party:"APC",state:"Akwa Ibom",emoji:"👴",poll:44,note:"Current Senate President · APC"},
+        {id:"s2",name:"Abdul-Aziz Yari",party:"APC",state:"Zamfara",emoji:"🧔",poll:26,note:"APC Senator"},
+        {id:"s3",name:"Philip Aduda",party:"PDP",state:"FCT Abuja",emoji:"👨",poll:18,note:"PDP Senator"},
+        {id:"s4",name:"Bamidele Opeyemi",party:"APC",state:"Ekiti",emoji:"🎓",poll:12,note:"APC Senator"},
+      ];
+
+      // Speaker candidates
+      const SPEAKER_CANDIDATES=[
+        {id:"r1",name:"Abbas Tajudeen",party:"APC",state:"Kaduna",emoji:"🧑‍⚖️",poll:40,note:"Current Speaker · APC"},
+        {id:"r2",name:"Kingsley Chinda",party:"PDP",state:"Rivers",emoji:"👨‍💼",poll:33,note:"PDP · Minority Leader"},
+        {id:"r3",name:"Ikenga Ugochinyere",party:"NDC",state:"Imo",emoji:"👨",poll:17,note:"NDC · Ex-Labour Party"},
+        {id:"r4",name:"Wale Raji",party:"ADC",state:"Lagos",emoji:"🧑",poll:10,note:"ADC"},
+      ];
+
+      // State Assembly Speakers
+      const ASSEMBLY_SPEAKERS=[
+        {id:"as1",name:"Adebo Ogundoyin",party:"APC",state:"Oyo",emoji:"🧑",poll:55,note:"Oyo State House of Assembly Speaker"},
+        {id:"as2",name:"Olakunle Oluomo",party:"APC",state:"Ogun",emoji:"👴",poll:52,note:"Ogun State House of Assembly Speaker"},
+        {id:"as3",name:"Mudashiru Obasa",party:"APC",state:"Lagos",emoji:"👨",poll:58,note:"Lagos State House of Assembly Speaker"},
+        {id:"as4",name:"Emmanuel Ukpong-Eko",party:"PDP",state:"Akwa Ibom",emoji:"🧔",poll:50,note:"Akwa Ibom Assembly Speaker"},
+        {id:"as5",name:"Kennedy Ibeh",party:"APC",state:"Imo",emoji:"🧑",poll:46,note:"Imo State Assembly Speaker"},
+        {id:"as6",name:"Adewale Okie",party:"APC",state:"Edo",emoji:"👨",poll:44,note:"Edo State Assembly Speaker"},
+        {id:"as7",name:"Abdulmumin Ojo",party:"APC",state:"Kebbi",emoji:"🧔",poll:48,note:"Kebbi State Assembly Speaker"},
+        {id:"as8",name:"Ali Isa Ahmad",party:"APC",state:"Gombe",emoji:"👨",poll:51,note:"Gombe State Assembly Speaker"},
+        {id:"as9",name:"Yakubu Sule",party:"NNPP",state:"Kano",emoji:"🧑",poll:43,note:"Kano State Assembly Speaker"},
+        {id:"as10",name:"Danladi Zau Lonyan",party:"APC",state:"Taraba",emoji:"👨",poll:45,note:"Taraba State Assembly Speaker"},
+      ];
+
+      const PRES_CANDIDATES=[
+        {id:"p1",name:"Bola Ahmed Tinubu",party:"APC",state:"Lagos",emoji:"👴",poll:38,note:"Incumbent · APC primary winner May 2026"},
+        {id:"p2",name:"Atiku Abubakar",party:"ADC",state:"Adamawa",emoji:"🧔",poll:28,note:"ADC primary winner · Ex-PDP"},
+        {id:"p3",name:"Peter Obi",party:"NDC",state:"Anambra",emoji:"👨",poll:22,note:"NDC candidate · Ex-Labour Party"},
+        {id:"p4",name:"Goodluck Jonathan",party:"PDP2",state:"Bayelsa",emoji:"🎩",poll:6,note:"PDP Turaki faction"},
+        {id:"p5",name:"Sandy Onor",party:"PDP",state:"Cross River",emoji:"🧑",poll:3,note:"PDP Wike faction consensus candidate"},
+        {id:"p6",name:"Seyi Makinde",party:"APM",state:"Oyo",emoji:"👨‍💼",poll:2,note:"APM candidate"},
+        {id:"p7",name:"Adewole Adebayo",party:"SDP",state:"Osun",emoji:"👨‍⚖️",poll:1,note:"SDP candidate"},
+        {id:"p8",name:"Omoyele Sowore",party:"AAC",state:"Ogun",emoji:"✊",poll:1,note:"AAC · Sahara Reporters founder"},
+      ];
+
+      // Build combined lookup
+      const ALL_CANDIDATES={};
+      const POSITION_MAP={
+        president:PRES_CANDIDATES,
+        governor:GOV_CANDIDATES,
+        senate_pres:SENATE_CANDIDATES,
+        house_speaker:SPEAKER_CANDIDATES,
+        house_assembly:ASSEMBLY_SPEAKERS,
+      };
+      Object.values(POSITION_MAP).forEach(arr=>arr.forEach(c=>{ALL_CANDIDATES[c.id]=c;}));
+
+      // Comments store
+      const COMMENTS={};
+
+      // ═══════════════════════════════════════
+      //  STATE
+      // ═══════════════════════════════════════
+      let wallet=50000;
+      let slip={};       // id -> {c, position, stake}
+      let placedBets=[];
+      let activePos="president";
+      let activeFilter="all";
+      let starRating=0;
+      let liveBetCounts={};  // id -> count (animated)
+
+      // ═══════════════════════════════════════
+      //  INIT
+      // ═══════════════════════════════════════
+      function init(){
+        populateStateDropdown();
+        buildPosTabs();
+        buildLbPosTabs();
+        renderMarkets();
+        buildFAQ();
+        buildTopMarkets();
+        initLiveChart();
+        buildLeaderboard("president");
+        buildTicker();
+        animateHeroStats();
+        startLiveSimulation();
+        initReveal();
+      }
+
+      function populateStateDropdown(){
+        const sel=document.getElementById("rState");
+        STATES.forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;sel.appendChild(o);});
+      }
+
+      // ═══════════════════════════════════════
+      //  PAGE ROUTING
+      // ═══════════════════════════════════════
+      function showPage(id,btn){
+        document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+        document.getElementById("page-"+id).classList.add("active");
+        document.querySelectorAll(".nav-link,.mob-link").forEach(b=>b.classList.remove("active"));
+        if(btn)btn.classList.add("active");
+        window.scrollTo({top:0,behavior:"smooth"});
+        if(id==="mybets")renderBetsTable();
+        if(id==="leaderboard")buildLeaderboard("president");
+        if(id==="markets")renderMarkets();
+      }
+
+      function toggleMob(){document.getElementById("mobMenu").classList.toggle("open");}
+
+      // ═══════════════════════════════════════
+      //  TICKER
+      // ═══════════════════════════════════════
+      function buildTicker(){
+        const t=document.getElementById("ticker");
+        const items=PRES_CANDIDATES.map(c=>{
+          const p=PARTIES[c.party]||{};
+          const chg=((Math.random()-.4)*3).toFixed(1);
+          const cls=chg>0?"up":"dn";
+          return `<span class="ticker-item">${c.emoji} ${c.name} (${c.party}) <span class="${cls}">${chg>0?"+":""}${chg}%</span></span>`;
+        });
+        // duplicate for infinite scroll
+        t.innerHTML=items.join("")+items.join("");
+      }
+
+      // ═══════════════════════════════════════
+      //  POSITION TABS
+      // ═══════════════════════════════════════
+      function buildPosTabs(){
+        const wrap=document.getElementById("posTabs");
+        wrap.innerHTML=POSITIONS.map(p=>`<button class="pos-tab ${p.id===activePos?"active":""}" onclick="selectPos('${p.id}',this)">${p.label}</button>`).join("");
+      }
+
+      function selectPos(id,btn){
+        document.querySelectorAll("#posTabs .pos-tab").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        activePos=id;
+        activeFilter="all";
+        document.querySelectorAll(".filter-pill").forEach(b=>b.classList.remove("active"));
+        document.querySelector(".filter-pill").classList.add("active");
+        renderMarkets();
+      }
+
+      function setFilter(f,btn){
+        activeFilter=f;
+        document.querySelectorAll(".filter-pill").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        renderMarkets();
+      }
+
+      function filterCards(){renderMarkets();}
+
+      // ═══════════════════════════════════════
+      //  RENDER MARKETS
+      // ═══════════════════════════════════════
+      function renderMarkets(){
+        const grid=document.getElementById("marketGrid");
+        const q=(document.getElementById("searchBox")||{value:""}).value.toLowerCase();
+        let list=(POSITION_MAP[activePos]||[]).filter(c=>{
+          if(activeFilter!=="all"&&c.party!==activeFilter)return false;
+          if(q&&!c.name.toLowerCase().includes(q)&&!c.party.toLowerCase().includes(q)&&!(c.state||"").toLowerCase().includes(q))return false;
+          return true;
+        });
+        if(!list.length){grid.innerHTML='<div style="color:var(--muted);text-align:center;padding:3rem">No candidates found.</div>';return;}
+        grid.innerHTML=list.map(c=>cardHTML(c)).join("");
+        // animate bars
+        setTimeout(()=>{
+          grid.querySelectorAll(".mcard-bar-fill").forEach(el=>{el.style.width=el.dataset.w+"%";});
+        },50);
+      }
+
+      function cardHTML(c){
+        const p=PARTIES[c.party]||{};
+        const inSlip=slip[c.id];
+        const betCount=liveBetCounts[c.id]||Math.floor(Math.random()*800)+50;
+        liveBetCounts[c.id]=betCount;
+        const pos=POSITIONS.find(x=>x.id===activePos)||{};
+        return `<div class="mcard ${inSlip?"selected":""}" id="mc-${c.id}" style="--party-color:${p.color}">
+          <div class="mcard-top">
+            <div class="mcard-avatar">${c.emoji}</div>
+            <div class="mcard-info">
+              <div class="mcard-name">${c.name}</div>
+              <div class="mcard-meta">
+                <span class="party-badge" style="background:${p.bg};color:${p.text}">${p.logo} ${c.party}</span>
+                <span class="mcard-pos">${pos.label||activePos}</span>
+                <span class="mcard-state">📍 ${c.state||""}</span>
+              </div>
+            </div>
+            <div class="mcard-odds">2.0×</div>
+          </div>
+          <div class="mcard-bar-row">
+            <div class="mcard-bar-track"><div class="mcard-bar-fill" data-w="${c.poll}" style="width:0%;background:${p.color}"></div></div>
+            <span class="mcard-pct">${c.poll}%</span>
+          </div>
+          ${c.note?`<div style="font-size:.7rem;color:var(--muted);margin-bottom:.7rem;padding:4px 8px;background:rgba(255,255,255,.04);border-radius:6px;border-left:2px solid ${p.color}">ℹ️ ${c.note}</div>`:""}
+          <div class="mcard-actions">
+            <button class="btn-yes ${inSlip?"active":""}" onclick="toggleSlip('${c.id}','${activePos}')">${inSlip?"✅ In Slip":"＋ Bet Win"}</button>
+            <button class="btn-no" onclick="toggleSlip('${c.id}','${activePos}')">✕ Bet Lose</button>
+            <button class="btn-bio" onclick="openBio('${c.id}')">📖</button>
+            <button class="btn-comment-mini" onclick="openBio('${c.id}',true)">💬</button>
+          </div>
+          <div class="mcard-volume">🔥 <span>${betCount.toLocaleString()}</span> bets placed</div>
+        </div>`;
+      }
+
+      // ═══════════════════════════════════════
+      //  BET SLIP
+      // ═══════════════════════════════════════
+      function toggleSlip(id,posId){
+        const c=ALL_CANDIDATES[id];
+        if(!c)return;
+        if(slip[id]){
+          delete slip[id];
+          toast("info","🗑️",`${c.name} removed`);
+        } else {
+          slip[id]={c,position:posId,stake:500};
+          toast("ok","✅",`${c.name} added to slip`);
+        }
+        renderMarkets();
+        updateSlipUI();
+      }
+
+      function updateSlipUI(){
+        const count=Object.keys(slip).length;
+        ["slipCount","slipCountM"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=count;});
+        document.getElementById("floatCount").textContent=count;
+        document.getElementById("floatSlip").classList.toggle("show",count>0);
+        const entries=Object.values(slip);
+        const total=entries.reduce((s,e)=>s+(parseInt(e.stake)||0),0);
+        // desktop
+        renderSlipEntries("slipBody","slipEmpty",false);
+        const sf=document.getElementById("slipFooter");
+        if(sf){sf.style.display=count?"block":"none";}
+        const st=document.getElementById("slipTotal"),sp=document.getElementById("slipPayout");
+        if(st)st.textContent="₦"+total.toLocaleString();
+        if(sp)sp.textContent="₦"+(total*2).toLocaleString();
+        // mobile
+        renderSlipEntries("slipBodyM","slipBodyM_empty",true);
+        const sfm=document.getElementById("slipFooterM");
+        if(sfm){sfm.style.display=count?"block":"none";}
+        const stm=document.getElementById("slipTotalM"),spm=document.getElementById("slipPayoutM");
+        if(stm)stm.textContent="₦"+total.toLocaleString();
+        if(spm)spm.textContent="₦"+(total*2).toLocaleString();
+        const bp=document.getElementById("btnPlace");
+        if(bp)bp.disabled=total===0||count===0;
+      }
+
+      function renderSlipEntries(bodyId,emptyId,isMobile){
+        const body=document.getElementById(bodyId);
+        if(!body)return;
+        body.querySelectorAll(".slip-entry").forEach(e=>e.remove());
+        const count=Object.keys(slip).length;
+        let emptyEl=body.querySelector(".slip-empty");
+        if(!emptyEl&&emptyId){emptyEl=document.getElementById(emptyId);}
+        if(emptyEl)emptyEl.style.display=count?"none":"block";
+        const suffix=isMobile?"_m":"";
+        Object.values(slip).forEach(entry=>{
+          const {c,position,stake}=entry;
+          const p=PARTIES[c.party]||{};
+          const pos=POSITIONS.find(x=>x.id===position)||{};
+          const div=document.createElement("div");
+          div.className="slip-entry";
+          div.innerHTML=`
+            <button class="slip-rm" onclick="removeSlip('${c.id}')">✕</button>
+            <div class="slip-pos-lbl">${pos.label||position}</div>
+            <div class="slip-name">${c.name}</div>
+            <div class="slip-party-lbl" style="color:${p.text}">${c.party} · ${c.state||""}</div>
+            <div class="slip-stake-row">
+              <span class="slip-lbl">₦</span>
+              <input class="slip-input" type="number" value="${stake}" min="100"
+                oninput="updStake('${c.id}',this.value)" id="si-${c.id}${suffix}"/>
+              <span class="slip-payout" id="sp-${c.id}${suffix}">→ ₦${(stake*2).toLocaleString()}</span>
+            </div>`;
+          body.appendChild(div);
+        });
+      }
+
+      function removeSlip(id){delete slip[id];renderMarkets();updateSlipUI();}
+      function clearSlip(){slip={};renderMarkets();updateSlipUI();toast("info","🗑️","Slip cleared");}
+      function updStake(id,val){
+        const v=Math.max(100,parseInt(val)||0);
+        if(slip[id])slip[id].stake=v;
+        ["sp-"+id,"sp-"+id+"_m"].forEach(sid=>{const el=document.getElementById(sid);if(el)el.textContent="→ ₦"+(v*2).toLocaleString();});
+        updateSlipUI();
+      }
+
+      // ═══════════════════════════════════════
+      //  CONFIRM & PLACE
+      // ═══════════════════════════════════════
+      function openConfirm(){
+        const entries=Object.values(slip);
+        if(!entries.length)return;
+        let total=0;entries.forEach(e=>total+=parseInt(e.stake)||0);
+        if(total>wallet){toast("err","❌","Insufficient balance. Please top up.");return;}
+        const body=document.getElementById("confirmBody");
+        body.innerHTML=entries.map(e=>`<div class="confirm-row"><span class="ck">${e.c.name} (${e.c.party})</span><span class="cv">₦${(parseInt(e.stake)||0).toLocaleString()}</span></div>`).join("")
+          +`<div class="divider"></div><div class="confirm-row"><span class="ck">Total Stake</span><span class="cv">₦${total.toLocaleString()}</span></div><div class="confirm-row"><span class="ck">Max Payout (2×)</span><span class="cv payout">₦${(total*2).toLocaleString()}</span></div>`;
+        openModal("confirmModal");
+      }
+
+      function doPlace(){
+        const entries=Object.values(slip);
+        let total=0;entries.forEach(e=>total+=parseInt(e.stake)||0);
+        if(total>wallet){toast("err","❌","Insufficient balance!");return;}
+        wallet-=total;
+        updateWallet();
+        entries.forEach(e=>{
+          const pos=POSITIONS.find(x=>x.id===e.position)||{};
+          placedBets.push({id:Date.now()+Math.random(),c:e.c,posLabel:pos.label||e.position,stake:parseInt(e.stake)||0,payout:(parseInt(e.stake)||0)*2,status:"pending",time:new Date().toLocaleString()});
+          liveBetCounts[e.c.id]=(liveBetCounts[e.c.id]||0)+1;
+        });
+        slip={};
+        renderMarkets();
+        updateSlipUI();
+        closeModal("confirmModal");
+        closeModal("slipModal");
+        toast("ok","🎉","Bets placed! Good luck!");
+      }
+
+      // ═══════════════════════════════════════
+      //  BETS TABLE
+      // ═══════════════════════════════════════
+      function renderBetsTable(){
+        const tbody=document.getElementById("betsBody");
+        if(!placedBets.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">No bets placed yet.</td></tr>';return;}
+        const sm={pending:"⏳ Pending",won:"🏆 Won",lost:"❌ Lost"};
+        const sc={pending:"badge-pending",won:"badge-won",lost:"badge-lost"};
+        const p=PARTIES;
+        tbody.innerHTML=placedBets.slice().reverse().map(b=>{
+          const pt=p[b.c.party]||{};
+          return `<tr>
+            <td><strong>${b.c.emoji} ${b.c.name}</strong></td>
+            <td style="color:var(--muted);font-size:.78rem">${b.posLabel}</td>
+            <td><span style="color:${pt.text};font-weight:700">${b.c.party}</span></td>
+            <td style="font-family:var(--f-mono)">₦${b.stake.toLocaleString()}</td>
+            <td style="font-family:var(--f-mono);color:var(--gold)">₦${b.payout.toLocaleString()}</td>
+            <td><span class="badge ${sc[b.status]}">${sm[b.status]}</span></td>
+            <td style="font-size:.72rem;color:var(--muted)">${b.time}</td>
+          </tr>`;
+        }).join("");
+      }
+
+      // ═══════════════════════════════════════
+      //  BIO MODAL
+      // ═══════════════════════════════════════
+      function openBio(id,scrollComment){
+        const c=ALL_CANDIDATES[id];
+        if(!c)return;
+        const p=PARTIES[c.party]||{};
+        const bio=CANDIDATE_BIOS[id]||{bio:"Biography coming soon.",manifesto:["Manifesto details to be updated."]};
+        if(!COMMENTS[id])COMMENTS[id]=[];
+        document.getElementById("bioModalTitle").textContent=c.name;
+        const comments=COMMENTS[id].map(cm=>`<div class="comment-item"><div class="comment-user">${cm.user}</div><div class="comment-text">${cm.text}</div><div class="comment-time">${cm.time}</div></div>`).join("")||"<p style='color:var(--muted);font-size:.82rem'>No comments yet. Be the first!</p>";
+        document.getElementById("bioBody").innerHTML=`
+          <div class="bio-head">
+            <div class="bio-avatar" style="background:${p.color}20;border:1px solid ${p.color}40">${c.emoji}</div>
+            <div>
+              <div class="bio-name">${c.name}</div>
+              <div class="bio-tags">
+                <span class="party-badge" style="background:${p.bg};color:${p.text}">${p.logo} ${p.full||c.party}</span>
+                <span style="font-size:.75rem;color:var(--muted);padding:2px 8px;background:var(--card2);border-radius:99px">📍 ${c.state||""}</span>
+              </div>
+              <div style="font-size:.78rem;color:var(--muted)">${c.note||""}</div>
+            </div>
+          </div>
+          <div class="bio-section-title">Biography</div>
+          <div class="bio-text">${bio.bio}</div>
+          <div class="bio-section-title">Key Manifesto Points</div>
+          <ul class="manifesto-list">${bio.manifesto.map(m=>`<li>✔️ ${m}</li>`).join("")}</ul>
+          <div class="comment-section">
+            <div class="bio-section-title">💬 Comments</div>
+            <div class="comment-input-wrap">
+              <input class="comment-input" id="cInput-${id}" placeholder="Share your thoughts about ${c.name}..."/>
+              <button class="btn-comment-send" onclick="addComment('${id}')">Post</button>
+            </div>
+            <div class="comments-list" id="cList-${id}">${comments}</div>
+          </div>`;
+        openModal("bioModal");
+        if(scrollComment)setTimeout(()=>document.querySelector(".comment-section")?.scrollIntoView({behavior:"smooth"}),300);
+      }
+
+      function addComment(id){
+        const inp=document.getElementById("cInput-"+id);
+        if(!inp||!inp.value.trim())return;
+        if(!COMMENTS[id])COMMENTS[id]=[];
+        COMMENTS[id].push({user:"You",text:inp.value.trim(),time:new Date().toLocaleTimeString()});
+        inp.value="";
+        const list=document.getElementById("cList-"+id);
+        if(list)list.innerHTML=COMMENTS[id].map(cm=>`<div class="comment-item"><div class="comment-user">${cm.user}</div><div class="comment-text">${cm.text}</div><div class="comment-time">${cm.time}</div></div>`).join("");
+        toast("ok","💬","Comment posted!");
+      }
+
+      // ═══════════════════════════════════════
+      //  LEADERBOARD & LIVE CHART
+      // ═══════════════════════════════════════
+      let lbPos="president";
+      function buildLbPosTabs(){
+        const wrap=document.getElementById("lbPosTabs");
+        wrap.innerHTML=POSITIONS.map(p=>`<button class="pos-tab ${p.id==="president"?"active":""}" onclick="selectLbPos('${p.id}',this)">${p.label}</button>`).join("");
+      }
+      function selectLbPos(id,btn){
+        document.querySelectorAll("#lbPosTabs .pos-tab").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        lbPos=id;buildLeaderboard(id);
+      }
+      function buildLeaderboard(posId){
+        const list=(POSITION_MAP[posId]||[]).slice().sort((a,b)=>b.poll-a.poll).slice(0,10);
+        const max=list[0]?.poll||1;
+        const lbList=document.getElementById("lbList");
+        if(!lbList)return;
+        lbList.innerHTML=list.map((c,i)=>{
+          const p=PARTIES[c.party]||{};
+          const betCnt=liveBetCounts[c.id]||Math.floor(Math.random()*1200)+100;
+          liveBetCounts[c.id]=betCnt;
+          return `<div class="lb-item reveal" style="animation-delay:${i*.07}s">
+            <span class="lb-rank">${i===0?"🥇":i===1?"🥈":i===2?"🥉":i+1}</span>
+            <div class="lb-avatar">${c.emoji}</div>
+            <div class="lb-info">
+              <div class="lb-name">${c.name}</div>
+              <div class="lb-sub" style="color:${p.text}">${c.party} · ${c.state||""}</div>
+            </div>
+            <span class="lb-bets" id="lbc-${c.id}">${betCnt.toLocaleString()}</span>
+            <div class="lb-bar-wrap">
+              <div class="lb-bar-t"><div class="lb-bar-f" id="lbf-${c.id}" style="width:0%;background:${p.color}"></div></div>
+              <div class="lb-pct" id="lbp-${c.id}">${c.poll}%</div>
+            </div>
+          </div>`;
+        }).join("");
+        setTimeout(()=>{
+          list.forEach(c=>{
+            const el=document.getElementById("lbf-"+c.id);
+            const max2=list[0]?.poll||1;
+            if(el)el.style.width=(c.poll/max2*100)+"%";
+          });
+          document.querySelectorAll(".lb-item.reveal").forEach(el=>el.classList.add("in"));
+        },80);
+      }
+
+      // Live chart (simple bar chart via Canvas)
+      let chartData=[];
+      let chartAnim;
+      function initLiveChart(){
+        const canvas=document.getElementById("chartCanvas");
+        if(!canvas)return;
+        chartData=PRES_CANDIDATES.map(c=>({...c,live:c.poll+(Math.random()-.5)*2}));
+        drawChart();
+      }
+
+      function drawChart(){
+        const canvas=document.getElementById("chartCanvas");
+        if(!canvas)return;
+        const ctx=canvas.getContext("2d");
+        canvas.width=canvas.offsetWidth*window.devicePixelRatio||600;
+        canvas.height=280*window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio,window.devicePixelRatio);
+        const W=canvas.offsetWidth||600,H=280;
+        ctx.clearRect(0,0,W,H);
+        // grid lines
+        ctx.strokeStyle="rgba(255,255,255,0.05)";ctx.lineWidth=1;
+        [0,.25,.5,.75,1].forEach(p=>{const y=H-20-p*(H-40);ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(W-10,y);ctx.stroke();});
+        const n=chartData.length;
+        const bw=Math.min(60,(W-60)/n-8);
+        chartData.forEach((c,i)=>{
+          const p=PARTIES[c.party]||{};
+          const x=50+i*((W-60)/n)+((W-60)/n-bw)/2;
+          const barH=(c.live/100)*(H-40);
+          const y=H-20-barH;
+          // gradient bar
+          const grad=ctx.createLinearGradient(0,y,0,H-20);
+          grad.addColorStop(0,p.color||"#008751");
+          grad.addColorStop(1,p.color+"44"||"#00875144");
+          ctx.fillStyle=grad;
+          ctx.beginPath();
+          ctx.roundRect?ctx.roundRect(x,y,bw,barH,4):ctx.rect(x,y,bw,barH);
+          ctx.fill();
+          // label
+          ctx.fillStyle="rgba(255,255,255,.6)";
+          ctx.font="10px DM Sans";
+          ctx.textAlign="center";
+          ctx.fillText(c.party,x+bw/2,H-5);
+          ctx.fillStyle="rgba(255,255,255,.9)";
+          ctx.font="bold 11px DM Mono";
+          ctx.fillText(c.live.toFixed(1)+"%",x+bw/2,y-5);
+        });
+      }
+
+      function startLiveSimulation(){
+        setInterval(()=>{
+          chartData.forEach(c=>{c.live=Math.max(1,Math.min(70,c.live+(Math.random()-.48)*.4));});
+          // update live bet counts
+          Object.keys(liveBetCounts).forEach(id=>{
+            if(Math.random()<.3)liveBetCounts[id]++;
+            const el=document.getElementById("lbc-"+id);
+            if(el)el.textContent=liveBetCounts[id].toLocaleString();
+          });
+          // update leaderboard poll bars
+          if(document.getElementById("page-leaderboard").classList.contains("active"))drawChart();
+        },2000);
+        // hero stat ticker
+        let n=18274;
+        setInterval(()=>{
+          n+=Math.floor(Math.random()*3);
+          const el=document.getElementById("hs1");
+          if(el)el.textContent=n.toLocaleString();
+        },3500);
+      }
+
+      // Top Markets widget
+      function buildTopMarkets(){
+        const w=document.getElementById("topMarketsWidget");
+        if(!w)return;
+        const top=PRES_CANDIDATES.slice(0,4);
+        w.innerHTML=top.map(c=>{
+          const p=PARTIES[c.party]||{};
+          return `<div style="display:flex;align-items:center;gap:.6rem;padding:.5rem 0;border-bottom:1px solid var(--bdr);cursor:pointer" onclick="toggleSlip('${c.id}','president')">
+            <span style="font-size:1.1rem">${c.emoji}</span>
+            <div style="flex:1;min-width:0"><div style="font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div><div style="font-size:.7rem;color:${p.text}">${c.party}</div></div>
+            <span style="font-family:var(--f-mono);font-size:.8rem;color:var(--gold)">${c.poll}%</span>
+          </div>`;
+        }).join("");
+      }
+
+      // ═══════════════════════════════════════
+      //  FAQ
+      // ═══════════════════════════════════════
+      const FAQS=[
+        {q:"What is NaijaBet 2027?",a:"NaijaBet 2027 is Nigeria's premier election prediction market platform for the 2027 General Elections. You place bets on candidates across all elective positions — President, Governor, Senate President, Speaker, and more. If your candidate wins, you receive up to 2× your stake."},
+        {q:"Who can use NaijaBet 2027?",a:"NaijaBet is exclusively for adults aged 18 years and above. You must register with a valid Nigerian phone number and provide accurate personal details. Underage betting is strictly prohibited and illegal."},
+        {q:"How does the maximum 2× payout work?",a:"For every bet you place, the maximum you can win is 2× the amount staked. For example, if you stake ₦5,000 on a candidate and they win the election, you receive ₦10,000 (your ₦5,000 stake + ₦5,000 profit). There are no complex odds — it's straightforward and transparent."},
+        {q:"When are bets settled?",a:"Bets are settled after INEC (Independent National Electoral Commission) officially declares results for each position. The Presidential election is scheduled for January 16, 2027. Governorship and other elections follow INEC's official calendar. Winnings are credited to your wallet within 24 hours of official declaration."},
+        {q:"How do I fund my wallet?",a:"You can top up your NaijaBet wallet via: Bank Transfer (GTBank, Access, UBA, Zenith), USSD codes (*737#, *901#), Debit/Credit Cards (Visa, Mastercard), and Mobile wallets (Opay, Palmpay, Kuda). Minimum top-up is ₦500."},
+        {q:"How do I withdraw my winnings?",a:"Winnings are paid directly to your registered Nigerian bank account or mobile wallet. Withdrawals are processed within 24–48 hours. Minimum withdrawal is ₦1,000. Ensure your BVN-verified bank account is linked to your NaijaBet profile."},
+        {q:"Are the candidate party affiliations accurate?",a:"Yes. All party affiliations on NaijaBet reflect confirmed primary results as of June 2026. Notable changes include: Atiku Abubakar (now ADC, formerly PDP), Peter Obi (now NDC, formerly Labour Party), and Kwankwaso (now NDC running mate, formerly NNPP). We update data as INEC confirms candidates."},
+        {q:"Can I cancel a bet after placing it?",a:"Bets cannot be cancelled once confirmed and placed. Please review your selections carefully in the Bet Slip before confirming. This ensures fairness for all participants on the platform."},
+        {q:"What happens if an election is postponed or cancelled?",a:"If INEC postpones an election, all affected bets are placed on hold and will be settled on the new official date. If an election is cancelled or a candidate is disqualified, all bets on that candidate are refunded in full to your wallet."},
+        {q:"Is NaijaBet safe and secure?",a:"Yes. NaijaBet uses bank-level SSL encryption for all transactions. Your personal data is protected under Nigeria's Data Protection Regulation (NDPR). We never share your information with third parties without consent. Contact us on WhatsApp (09016119197) if you notice any suspicious activity on your account."},
+        {q:"I have a gambling problem. Where can I get help?",a:"We take responsible gambling seriously. If you feel you're losing control of your betting habits, please contact the National Problem Gambling helpline. You can also self-exclude your NaijaBet account by contacting our support team on WhatsApp: 09016119197. We will process your self-exclusion within 24 hours."},
+      ];
+
+      function buildFAQ(){
+        const list=document.getElementById("faqList");
+        list.innerHTML=FAQS.map((f,i)=>`
+          <div class="faq-item" id="faq-${i}">
+            <button class="faq-q" onclick="toggleFaq(${i})">
+              <span>${f.q}</span>
+              <span class="faq-chevron">▼</span>
+            </button>
+            <div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>
+          </div>`).join("");
+      }
+
+      function toggleFaq(i){
+        const el=document.getElementById("faq-"+i);
+        el.classList.toggle("open");
+      }
+
+      // ═══════════════════════════════════════
+      //  FEEDBACK
+      // ═══════════════════════════════════════
+      function setStar(n){
+        starRating=n;
+        document.querySelectorAll(".star-btn").forEach((b,i)=>{
+          b.classList.toggle("active",i<n);
+          b.textContent=i<n?"⭐":"☆";
+        });
+      }
+      function toggleFcat(el){el.classList.toggle("active");}
+      function submitFeedback(){
+        const name=document.getElementById("fbName").value.trim();
+        const text=document.getElementById("fbText").value.trim();
+        if(!text){toast("err","❌","Please enter your feedback.");return;}
+        document.querySelector(".feedback-wrap>:not(#fbThanks)") && (document.querySelector(".feedback-wrap").querySelectorAll(":not(#fbThanks)").forEach(el=>el.style.display="none"));
+        document.getElementById("fbThanks").style.display="block";
+        toast("ok","🎉","Thank you for your feedback!");
+      }
+
+      // ═══════════════════════════════════════
+      //  WALLET & TOPUP
+      // ═══════════════════════════════════════
+      function updateWallet(){
+        document.getElementById("walletDisp").textContent="₦"+wallet.toLocaleString();
+      }
+      function setAmt(n){document.getElementById("topupAmt").value=n;}
+      function doTopup(){
+        const n=parseInt(document.getElementById("topupAmt").value)||0;
+        if(n<500){toast("err","❌","Minimum top-up is ₦500");return;}
+        wallet+=n;updateWallet();
+        closeModal("topupModal");
+        toast("ok","💰","₦"+n.toLocaleString()+" added!");
+        document.getElementById("topupAmt").value="";
+      }
+
+      // ═══════════════════════════════════════
+      //  REGISTER / LOGIN
+      // ═══════════════════════════════════════
+      function switchReg(mode){
+        document.getElementById("regForm").style.display=mode==="reg"?"block":"none";
+        document.getElementById("loginForm").style.display=mode==="login"?"block":"none";
+        document.getElementById("tabReg").classList.toggle("active",mode==="reg");
+        document.getElementById("tabLogin").classList.toggle("active",mode==="login");
+      }
+      function checkPw(v){
+        const bar=document.getElementById("pwBar");
+        if(!bar)return;
+        const s=v.length>=10&&/[A-Z]/.test(v)&&/[0-9]/.test(v)?3:v.length>=8?2:v.length>=4?1:0;
+        const cols=["","#f06060","#f5a623","#00c97a"];
+        const ws=["0%","33%","66%","100%"];
+        bar.style.width=ws[s];bar.style.background=cols[s];
+      }
+      function doRegister(){
+        const name=document.getElementById("rName").value.trim();
+        const email=document.getElementById("rEmail").value.trim();
+        if(!name||!email){toast("err","❌","Please fill all required fields");return;}
+        closeModal("regModal");
+        toast("ok","🎉","Welcome to NaijaBet, "+name.split(" ")[0]+"!");
+      }
+      function doLogin(){
+        const email=document.getElementById("lEmail").value.trim();
+        if(!email){toast("err","❌","Please enter your email");return;}
+        closeModal("regModal");
+        toast("ok","👋","Logged in successfully!");
+      }
+
+      // ═══════════════════════════════════════
+      //  MODALS
+      // ═══════════════════════════════════════
+      function openModal(id){document.getElementById(id).classList.add("open");document.body.style.overflow="hidden";}
+      function closeModal(id){document.getElementById(id).classList.remove("open");document.body.style.overflow="";}
+      function bgClose(e,id){if(e.target.id===id)closeModal(id);}
+
+      // ═══════════════════════════════════════
+      //  TOAST
+      // ═══════════════════════════════════════
+      function toast(type,icon,msg){
+        const wrap=document.getElementById("toastWrap");
+        const t=document.createElement("div");
+        t.className="toast "+type;
+        t.innerHTML=`<span>${icon}</span><span class="toast-msg">${msg}</span>`;
+        wrap.appendChild(t);
+        setTimeout(()=>{t.style.opacity="0";t.style.transition="opacity .3s";setTimeout(()=>t.remove(),300);},3000);
+      }
+
+      // ═══════════════════════════════════════
+      //  ANIMATIONS & UTILS
+      // ═══════════════════════════════════════
+      function animateHeroStats(){
+        let n=18274;
+        setInterval(()=>{n+=Math.floor(Math.random()*2);const el=document.getElementById("hs1");if(el)el.textContent=n.toLocaleString();},4000);
+      }
+
+      function initReveal(){
+        const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");obs.unobserve(e.target);}});},{threshold:.1});
+        document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+      }
+
+      window.addEventListener("resize",()=>{if(document.getElementById("page-leaderboard").classList.contains("active"))drawChart();});
+
+      // ── BOOT ──
+      init();
+      showPage("markets");
+    </script>
+  </body>
+</html>
